@@ -13,6 +13,15 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
+MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
+
+SYSTEM_PROMPT = (
+    "You are a PDF question-answering assistant. "
+    "Answer only from the context below. "
+    "If the answer isn't there, say you don't know. "
+    "Never invent facts, sources or page numbers."
+)
+
 
 def generate_answer(question, retrieved_chunks):
     context_parts = []
@@ -26,23 +35,13 @@ def generate_answer(question, retrieved_chunks):
     context = "\n\n---\n\n".join(context_parts)
 
     response = client.chat.completions.create(
-       model="openai/gpt-oss-20b",
+        model=MODEL,
         messages=[
-            {
-                "role": "system",
-                "content": (
-                    "You are a PDF question-answering assistant. "
-                    "Answer using only the supplied context. "
-                    "If the answer is not supported by the context, "
-                    "say: I don't know based on the provided PDF content. "
-                    "Cite supporting sources using the filename and page number. "
-                    "Never invent a source or page number."
-                ),
-            },
+            {"role": "system", "content": SYSTEM_PROMPT},
             {
                 "role": "user",
                 "content": (
-                    f"PDF CONTEXT:\n{context}\n\n"
+                    f"CONTEXT:\n{context}\n\n"
                     f"QUESTION: {question}"
                 ),
             },
@@ -62,5 +61,5 @@ if __name__ == "__main__":
         }
     ]
 
-    question = "What is Ubuntu?"
-    print(generate_answer(question, sample_chunks))
+    print(generate_answer("What is Ubuntu?", sample_chunks))
+    print(generate_answer("What is the capital of France?", sample_chunks))

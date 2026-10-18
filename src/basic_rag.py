@@ -1,18 +1,23 @@
+"""From-scratch RAG: pypdf -> hand-written splitter -> MiniLM embeddings in NumPy -> cosine top-k -> Groq."""
 
+import argparse
 from pathlib import Path
 
 import numpy as np
 from pypdf import PdfReader
+
+from answer_generator import generate_answer
 from embeddings import generate_embeddings
 
 
 PDF_DIR = Path(__file__).resolve().parent.parent / "pdfs"
 
 
-def load_and_chunk_pdfs(chunk_size=500, overlap=50):
-    chunks = []
+def load_pdf_words(pdf_dir=PDF_DIR):
+    """Return {file name: [(word, page_number), ...]} for every readable PDF."""
+    documents = {}
 
-    for pdf_path in PDF_DIR.glob("*.pdf"):
+    for pdf_path in sorted(pdf_dir.glob("*.pdf")):
         # Verify that the file is actually a PDF
         with open(pdf_path, "rb") as file:
             if file.read(5) != b"%PDF-":
@@ -25,31 +30,45 @@ def load_and_chunk_pdfs(chunk_size=500, overlap=50):
             print(f"Could not read {pdf_path.name}: {error}")
             continue
 
+        words = []
         for page_number, page in enumerate(reader.pages, start=1):
             text = page.extract_text() or ""
-            words = text.split()
+            words.extend((word, page_number) for word in text.split())
 
-            start = 0
-            while start < len(words):
-                end = start + chunk_size
-                chunk_text = " ".join(words[start:end])
+        documents[pdf_path.name] = words
 
-                if chunk_text.strip():
-                    chunks.append({
-                        "text": chunk_text,
-                        "source": pdf_path.name,
-                        "page": page_number,
-                    })
+    return documents
 
-                if end >= len(words):
-                    break
 
-                start += chunk_size - overlap
+def split_words(words, chunk_size=500, overlap=50):
+    """Sliding window over (word, page) pairs. Chunks may cross page boundaries."""
+    chunks = []
+    step = chunk_size - overlap
+
+    for start in range(0, len(words), step):
+        window = words[start:start + chunk_size]
+        first_page, last_page = window[0][1], window[-1][1]
+        chunks.append({
+            "text": " ".join(word for word, _ in window),
+            "page": str(first_page) if first_page == last_page else f"{first_page}-{last_page}",
+        })
+        if start + chunk_size >= len(words):
+            break
 
     return chunks
 
 
-def retrieve_chunks(question, chunks, embeddings, top_k=3):
+def load_and_chunk_pdfs(chunk_size=500, overlap=50):
+    chunks = []
+
+    for file_name, words in load_pdf_words().items():
+        for chunk in split_words(words, chunk_size, overlap):
+            chunks.append({**chunk, "source": file_name})
+
+    return chunks
+
+
+def retrieve_chunks(question, chunks, embeddings, top_k=4):
     question_embedding = generate_embeddings([question])[0]
 
     # Embeddings are normalized, so dot product gives cosine similarity
@@ -65,8 +84,20 @@ def retrieve_chunks(question, chunks, embeddings, top_k=3):
     ]
 
 
+def print_sources(results):
+    print("\nSources:")
+    for result in results:
+        print(f"  - {result['source']}, page {result['page']} (similarity {result['similarity']:.3f})")
+
+
 if __name__ == "__main__":
-    chunks = load_and_chunk_pdfs()
+    parser = argparse.ArgumentParser(description="From-scratch PDF question answering")
+    parser.add_argument("--chunk-size", type=int, default=500, help="words per chunk")
+    parser.add_argument("--overlap", type=int, default=50, help="words of overlap")
+    parser.add_argument("--top-k", type=int, default=4)
+    args = parser.parse_args()
+
+    chunks = load_and_chunk_pdfs(args.chunk_size, args.overlap)
 
     if not chunks:
         print("No PDF text found. Check the files inside the pdfs folder.")
@@ -74,22 +105,14 @@ if __name__ == "__main__":
 
     print(f"Total chunks created: {len(chunks)}")
 
-    texts = [chunk["text"] for chunk in chunks]
-    embeddings = generate_embeddings(texts)
+    embeddings = generate_embeddings([chunk["text"] for chunk in chunks])
 
-    question = input("\nAsk a question about your PDFs: ").strip()
+    print("\nAsk questions about your PDFs (empty line to quit).")
+    while True:
+        question = input("\nQuestion: ").strip()
+        if not question:
+            break
 
-    if not question:
-        print("Please enter a question.")
-        raise SystemExit(1)
-
-    results = retrieve_chunks(question, chunks, embeddings)
-
-    print("\nMost relevant passages:\n")
-
-    for result in results:
-        print(f"Source: {result['source']}")
-        print(f"Page: {result['page']}")
-        print(f"Similarity: {result['similarity']:.4f}")
-        print(result["text"])
-        print("-" * 60)
+        results = retrieve_chunks(question, chunks, embeddings, args.top_k)
+        print("\nAnswer:\n" + generate_answer(question, results))
+        print_sources(results)
