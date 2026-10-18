@@ -1,0 +1,13 @@
+
+pypdf
+sentence-transformers
+numpy
+groq
+python-dotenv
+chromadb
+langchain
+langchain-community
+langchain-text-splitters
+langchain-chroma
+langchain-groq
+langfuse 
