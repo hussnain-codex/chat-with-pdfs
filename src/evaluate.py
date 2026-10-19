@@ -20,14 +20,15 @@ from pathlib import Path
 from langchain_rag import build_chains, flush_langfuse, langfuse_handler, run_config, sources_of
 
 ROOT = Path(__file__).resolve().parent.parent
-QUESTIONS_FILE = ROOT / "questions.json"
-RESULTS_FILE = ROOT / "results" / "chunk_size_eval.csv"
+QUESTIONS_FILE = ROOT / "questions.json"                     # the 15 test questions
+RESULTS_FILE = ROOT / "results" / "chunk_size_eval.csv"      # one row per (chunk size, question)
 README = ROOT / "README.md"
-CHUNK_SIZES = [200, 500, 1000]
+CHUNK_SIZES = [200, 500, 1000]                               # words per chunk to compare
 FIELDS = ["chunk_size", "id", "question", "expected_answer", "answer", "sources", "correct"]
 
 
 def load_questions():
+    """Read questions.json and stop with a clear message if any question or answer is blank."""
     questions = json.loads(QUESTIONS_FILE.read_text(encoding="utf-8"))
     missing = [q["id"] for q in questions if not q["question"].strip() or not q["expected_answer"].strip()]
     if missing:
@@ -36,6 +37,7 @@ def load_questions():
 
 
 def read_results():
+    """Return the rows already saved in the results CSV (empty list if there is no file yet)."""
     if not RESULTS_FILE.exists():
         return []
     with open(RESULTS_FILE, newline="", encoding="utf-8") as file:
@@ -48,9 +50,11 @@ def run(force=False):
     Each answer is appended to the CSV as soon as it arrives, so if Groq drops
     the connection you can just run again and it continues where it stopped.
     """
+    # --force: delete old results (and any scores in them) and start fresh
     if force and RESULTS_FILE.exists():
         RESULTS_FILE.unlink()
 
+    # Work out which (chunk size, question) pairs still have no saved answer
     questions = load_questions()
     done = {(int(r["chunk_size"]), int(r["id"])) for r in read_results()}
     todo = [(size, q) for size in CHUNK_SIZES for q in questions if (size, q["id"]) not in done]
@@ -62,6 +66,7 @@ def run(force=False):
     new_file = not RESULTS_FILE.exists()
     handler = langfuse_handler()
 
+    # "a" = append, so answers from an earlier interrupted run are kept
     with open(RESULTS_FILE, "a", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=FIELDS)
         if new_file:
@@ -71,9 +76,11 @@ def run(force=False):
                 pending = [q for size, q in todo if size == chunk_size]
                 if not pending:
                     continue
+                # Build (or reuse) the Chroma index for this chunk size, overlap = 10%
                 rag_chain, _ = build_chains(chunk_size, max(10, chunk_size // 10))
                 for q in pending:
                     print(f"[{chunk_size}w] Q{q['id']}: {q['question']}")
+                    # Tagged so these traces can be filtered by chunk size in Langfuse
                     result = rag_chain.invoke(
                         q["question"],
                         config=run_config(handler, "eval", tags=[f"chunk-{chunk_size}w", "eval"]),
@@ -85,9 +92,9 @@ def run(force=False):
                         "expected_answer": q["expected_answer"],
                         "answer": result["answer"],
                         "sources": " | ".join(sources_of(result["docs"])),
-                        "correct": "",
+                        "correct": "",          # filled in by hand later
                     })
-                    file.flush()
+                    file.flush()                # write to disk now, in case the next call fails
         except Exception as error:
             raise SystemExit(
                 f"\nStopped: {error}\nAnswers so far are saved. Run `python src/evaluate.py run` again to continue."
@@ -99,6 +106,10 @@ def run(force=False):
 
 
 def summarize():
+    """Count the y/n scores per chunk size, print a table, and put it in README.md.
+
+    Stops early with a message if answers are missing or some rows are not scored.
+    """
     rows = read_results()
     if not rows:
         raise SystemExit("No results yet. Run `python src/evaluate.py run` first.")
@@ -110,6 +121,7 @@ def summarize():
     if unscored:
         raise SystemExit(f"{len(unscored)} rows are not scored yet (put y or n in the `correct` column).")
 
+    # Tally correct answers and totals for each chunk size
     correct = defaultdict(int)
     total = defaultdict(int)
     for row in rows:
@@ -117,6 +129,7 @@ def summarize():
         total[size] += 1
         correct[size] += row["correct"].strip().lower() in {"y", "yes", "1"}
 
+    # Build the Markdown table
     lines = [
         "| Chunk size (words) | Overlap (words) | Correct | Accuracy |",
         "|---|---|---|---|",
@@ -129,12 +142,14 @@ def summarize():
     table = "\n".join(lines)
     print(table)
 
+    # Replace whatever is between the two marker comments in README.md with the new table
     readme = README.read_text(encoding="utf-8")
     pattern = re.compile(r"(<!-- chunk-table:start -->\n).*?(\n<!-- chunk-table:end -->)", re.S)
     README.write_text(pattern.sub(lambda m: m.group(1) + table + m.group(2), readme), encoding="utf-8")
     print("\nREADME.md table updated.")
 
 
+# Entry point: `python src/evaluate.py run` or `python src/evaluate.py summarize`
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Chunk-size comparison")
     parser.add_argument("command", choices=["run", "summarize"])
