@@ -180,7 +180,7 @@ def build_rewrite_chain(llm):
 def build_chains(chunk_size=500, overlap=50, rebuild=False, k=4):
     vectorstore = get_vectorstore(chunk_size, overlap, rebuild)
     retriever = vectorstore.as_retriever(search_kwargs={"k": k})
-    llm = ChatGroq(model=MODEL, temperature=0)
+    llm = ChatGroq(model=MODEL, temperature=0, max_tokens=1024, max_retries=8)
     return build_rag_chain(retriever, llm), build_rewrite_chain(llm)
 
 

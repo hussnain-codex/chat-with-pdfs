@@ -1,92 +1,92 @@
 [
   {
     "id": 1,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "What is the minimum memory size recommended when setting up the Ubuntu virtual machine in VirtualBox?",
+    "expected_answer": "1024 MB",
+    "source": "virtualbox_ubuntu_lab_manual.pdf p12"
   },
   {
     "id": 2,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "Which virtual hard disk file type is selected by default when creating the virtual hard drive?",
+    "expected_answer": "VDI",
+    "source": "virtualbox_ubuntu_lab_manual.pdf p14"
   },
   {
     "id": 3,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "Under which license is VirtualBox freely available as open source software?",
+    "expected_answer": "GNU General Public License (GPL) version 2",
+    "source": "virtualbox_ubuntu_lab_manual.pdf p3"
   },
   {
     "id": 4,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "What was Pakistan's literacy rate (age 10 and above) in 2024-25, and what were male and female rates?",
+    "expected_answer": "63 percent (up from 61); male 73 percent, female 54 percent",
+    "source": "10_Education.pdf p6"
   },
   {
     "id": 5,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "What is Pakistan's HDI rank in the education indicators table?",
+    "expected_answer": "168",
+    "source": "10_Education.pdf p2"
   },
   {
     "id": 6,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "How many universities does Pakistan have?",
+    "expected_answer": "278 (163 public, 115 private)",
+    "source": "10_Education.pdf p1"
   },
   {
     "id": 7,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "What was life expectancy at birth in Pakistan in 2024?",
+    "expected_answer": "67.8 years (up from 66.5 in 2018)",
+    "source": "11_Health_and_Nutrition.pdf p2"
   },
   {
     "id": 8,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "How many registered doctors were there in Pakistan in 2025?",
+    "expected_answer": "336,582",
+    "source": "11_Health_and_Nutrition.pdf p4"
   },
   {
     "id": 9,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "How much was Pakistan's health expenditure in FY2025?",
+    "expected_answer": "Rs 942.2 billion (up 1.9% from Rs 924.9 billion in FY2024)",
+    "source": "11_Health_and_Nutrition.pdf p4"
   },
   {
     "id": 10,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "What was Pakistan's national mean temperature in 2025 and how did the year rank?",
+    "expected_answer": "23.9 °C, 1.09 °C above average; 2nd warmest year in the past 65 years",
+    "source": "17_Climate_Change.pdf p5"
   },
   {
     "id": 11,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "When was the Pakistan Green Taxonomy approved and notified?",
+    "expected_answer": "15 September 2025",
+    "source": "17_Climate_Change.pdf p13"
   },
   {
     "id": 12,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "Into which three paradigms does the RAG survey categorize RAG research?",
+    "expected_answer": "Naive RAG, Advanced RAG, Modular RAG",
+    "source": "rag_survey.pdf p2"
   },
   {
     "id": 13,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "What are the three quality scores used to evaluate RAG models in the survey?",
+    "expected_answer": "Context relevance, answer faithfulness, answer relevance",
+    "source": "rag_survey.pdf p12"
   },
   {
     "id": 14,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "What four abilities does RAG evaluation encompass according to the survey?",
+    "expected_answer": "Noise robustness, negative rejection, information integration, counterfactual robustness",
+    "source": "rag_survey.pdf p12"
   },
   {
     "id": 15,
-    "question": "",
-    "expected_answer": "",
-    "source": ""
+    "question": "What is the maximum context length of GPT-4 Turbo?",
+    "expected_answer": "I don't know (not in the PDFs)",
+    "source": "none - tests refusal"
   }
 ]

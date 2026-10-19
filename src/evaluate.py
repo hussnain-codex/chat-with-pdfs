@@ -35,48 +35,76 @@ def load_questions():
     return questions
 
 
+def read_results():
+    if not RESULTS_FILE.exists():
+        return []
+    with open(RESULTS_FILE, newline="", encoding="utf-8") as file:
+        return list(csv.DictReader(file))
+
+
 def run(force=False):
-    if RESULTS_FILE.exists() and not force:
-        raise SystemExit(f"{RESULTS_FILE} already exists (it may hold your scores). Use --force to overwrite.")
+    """Answer every question at every chunk size.
+
+    Each answer is appended to the CSV as soon as it arrives, so if Groq drops
+    the connection you can just run again and it continues where it stopped.
+    """
+    if force and RESULTS_FILE.exists():
+        RESULTS_FILE.unlink()
 
     questions = load_questions()
-    handler = langfuse_handler()
-    rows = []
-
-    try:
-        for chunk_size in CHUNK_SIZES:
-            overlap = max(10, chunk_size // 10)
-            rag_chain, _ = build_chains(chunk_size, overlap)
-            for q in questions:
-                print(f"[{chunk_size}w] Q{q['id']}: {q['question']}")
-                result = rag_chain.invoke(
-                    q["question"],
-                    config=run_config(handler, "eval", tags=[f"chunk-{chunk_size}w", "eval"]),
-                )
-                rows.append({
-                    "chunk_size": chunk_size,
-                    "id": q["id"],
-                    "question": q["question"],
-                    "expected_answer": q["expected_answer"],
-                    "answer": result["answer"],
-                    "sources": " | ".join(sources_of(result["docs"])),
-                    "correct": "",
-                })
-    finally:
-        flush_langfuse()
+    done = {(int(r["chunk_size"]), int(r["id"])) for r in read_results()}
+    todo = [(size, q) for size in CHUNK_SIZES for q in questions if (size, q["id"]) not in done]
+    if not todo:
+        print(f"All answers already in {RESULTS_FILE}. Use --force to start over.")
+        return
 
     RESULTS_FILE.parent.mkdir(exist_ok=True)
-    with open(RESULTS_FILE, "w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=FIELDS)
-        writer.writeheader()
-        writer.writerows(rows)
+    new_file = not RESULTS_FILE.exists()
+    handler = langfuse_handler()
 
-    print(f"\nWrote {len(rows)} rows to {RESULTS_FILE}. Score the `correct` column with y/n, then run `summarize`.")
+    with open(RESULTS_FILE, "a", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=FIELDS)
+        if new_file:
+            writer.writeheader()
+        try:
+            for chunk_size in CHUNK_SIZES:
+                pending = [q for size, q in todo if size == chunk_size]
+                if not pending:
+                    continue
+                rag_chain, _ = build_chains(chunk_size, max(10, chunk_size // 10))
+                for q in pending:
+                    print(f"[{chunk_size}w] Q{q['id']}: {q['question']}")
+                    result = rag_chain.invoke(
+                        q["question"],
+                        config=run_config(handler, "eval", tags=[f"chunk-{chunk_size}w", "eval"]),
+                    )
+                    writer.writerow({
+                        "chunk_size": chunk_size,
+                        "id": q["id"],
+                        "question": q["question"],
+                        "expected_answer": q["expected_answer"],
+                        "answer": result["answer"],
+                        "sources": " | ".join(sources_of(result["docs"])),
+                        "correct": "",
+                    })
+                    file.flush()
+        except Exception as error:
+            raise SystemExit(
+                f"\nStopped: {error}\nAnswers so far are saved. Run `python src/evaluate.py run` again to continue."
+            ) from error
+        finally:
+            flush_langfuse()
+
+    print(f"\nAll answers saved to {RESULTS_FILE}. Score the `correct` column with y/n, then run `summarize`.")
 
 
 def summarize():
-    with open(RESULTS_FILE, newline="", encoding="utf-8") as file:
-        rows = list(csv.DictReader(file))
+    rows = read_results()
+    if not rows:
+        raise SystemExit("No results yet. Run `python src/evaluate.py run` first.")
+    expected = len(CHUNK_SIZES) * len(load_questions())
+    if len(rows) < expected:
+        raise SystemExit(f"Only {len(rows)} of {expected} answers so far. Run `python src/evaluate.py run` to finish.")
 
     unscored = [r for r in rows if r["correct"].strip().lower() not in {"y", "n", "yes", "no", "1", "0"}]
     if unscored:

@@ -36,10 +36,15 @@ copy .env.example .env          # then fill in the keys
 
 ## Data
 
-| PDF | Type | Pages |
-|---|---|---|
-| `document1.pdf` | Lab manual: installing VirtualBox and Ubuntu | 26 |
-| _add 2–4 more_ | government policy / product manual / research paper | 20–100 |
+| PDF | Type | Pages | Words |
+|---|---|---|---|
+| `10_Education.pdf` | Government policy: Pakistan Economic Survey 2025, ch. 10 | 22 | ~8,900 |
+| `11_Health_and_Nutrition.pdf` | Government policy: Pakistan Economic Survey 2025, ch. 11 | 22 | ~8,800 |
+| `17_Climate_Change.pdf` | Government policy: Pakistan Economic Survey 2025, ch. 17 | 24 | ~11,800 |
+| `virtualbox_ubuntu_lab_manual.pdf` | Manual: installing VirtualBox and Ubuntu (screenshot-heavy) | 26 | ~1,400 |
+| `rag_survey.pdf` | Research paper: *Retrieval-Augmented Generation for Large Language Models: A Survey* (Gao et al., arXiv 2312.10997) | 21 | ~15,900 |
+
+The 15 test questions are in `questions.json`. There are 3 for the manual, 8 for the Economic Survey chapters, 3 for the RAG survey, and 1 that isn't answered in any PDF, which checks that the bot says "I don't know".
 
 ## Usage
 
@@ -93,9 +98,21 @@ Bot: I don't know.
 <!-- chunk-table:start -->
 | Chunk size (words) | Overlap (words) | Correct | Accuracy |
 |---|---|---|---|
-| 200 | 20 | _ / 15 | _ |
-| 500 | 50 | _ / 15 | _ |
-| 1000 | 100 | _ / 15 | _ |
+| 200 | 20 | 13 / 15 | 87% |
+| 500 | 50 | 11 / 15 | 73% |
+| 1000 | 100 | 11 / 15 | 73% |
 <!-- chunk-table:end -->
 
-**Observations:** _(fill in after scoring)_ Small chunks give precise matches but can cut an answer in half. Large chunks keep the context together but dilute the embedding and fill the prompt with irrelevant text.
+Setup: all-MiniLM-L6-v2 embeddings, top 4 chunks, Groq `openai/gpt-oss-20b` at temperature 0. Every answer is in `results/chunk_size_eval.csv`.
+
+**Observations**
+
+- **200 words scored best (13/15).** Short chunks embed one idea each, so specific facts like a date, a rank or a temperature land in a chunk that closely matches the question.
+- **Larger chunks lost specific facts.** At 500 and 1,000 words, "HDI rank 168" (Q5) and "Green Taxonomy notified on 15 September 2025" (Q11) are buried in long chunks about other topics. Their embeddings no longer match the question, so the model correctly said "I don't know".
+- **1,000 words gave the only made-up-looking answer.** Q9 answered "Rs 19.375 billion", which is the health PSDP allocation, not total health spending. With 4,000 words of context full of numbers, the model picked the wrong figure.
+- **Small chunks can miss context.** At 200 words, Q1 (minimum RAM) failed because the lab manual has almost no text per page and "Minimum size is 1024MB" sits in a short fragment without the words "memory" or "virtual machine". It only succeeded at 1,000 words, where the whole procedure is in one chunk.
+- **Q8 (registered doctors) failed at every size.** The number sits in a dense table paragraph. At 500 and 1,000 words the model returned an empty answer: `gpt-oss` is a reasoning model and sometimes uses up its output on reasoning.
+- **The "I don't know" test passed at every size.** Q15 (GPT-4 Turbo context length) is not in the PDFs, and every run refused to guess.
+- **Groq free-tier limit:** four 1,000-word chunks come to about 8,000 tokens, which hits the free plan's 8,000 tokens-per-minute cap. Answers are capped with `max_tokens=1024` so those requests fit.
+
+**Conclusion:** 200–500-word chunks suit fact lookups in reports. Large chunks help only with short, low-text documents like the lab manual.

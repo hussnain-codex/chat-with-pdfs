@@ -1,0 +1,87 @@
+chunk_size,id,question,expected_answer,answer,sources,correct
+200,1,What is the minimum memory size recommended when setting up the Ubuntu virtual machine in VirtualBox?,1024 MB,I don't know.,"virtualbox_ubuntu_lab_manual.pdf, page 3 | virtualbox_ubuntu_lab_manual.pdf, page 1-2 | rag_survey.pdf, page 18",n
+200,2,Which virtual hard disk file type is selected by default when creating the virtual hard drive?,VDI,The default virtual hard disk file type selected is **VDI** (VirtualBox Disk Image).,"virtualbox_ubuntu_lab_manual.pdf, page 13-15 | virtualbox_ubuntu_lab_manual.pdf, page 3 | virtualbox_ubuntu_lab_manual.pdf, page 16-18",y
+200,3,Under which license is VirtualBox freely available as open source software?,GNU General Public License (GPL) version 2,VirtualBox is freely available as open‑source software under the **GNU General Public License (GPL) version 2**.,"virtualbox_ubuntu_lab_manual.pdf, page 3 | virtualbox_ubuntu_lab_manual.pdf, page 1-2 | virtualbox_ubuntu_lab_manual.pdf, page 9-12",y
+200,4,"What was Pakistan's literacy rate (age 10 and above) in 2024-25, and what were male and female rates?","63 percent (up from 61); male 73 percent, female 54 percent","Pakistan’s literacy rate for people aged 10 years and above in 2024‑25 was **63 %**.  
+- **Male literacy:** 73 %  
+- **Female literacy:** 54 %","10_Education.pdf, page 6 | 10_Education.pdf, page 5 | 10_Education.pdf, page 7",y
+200,5,What is Pakistan's HDI rank in the education indicators table?,168,Pakistan’s HDI rank in the education indicators table is **168**.,"10_Education.pdf, page 5 | 10_Education.pdf, page 2 | 10_Education.pdf, page 3 | 10_Education.pdf, page 17",y
+200,6,How many universities does Pakistan have?,"278 (163 public, 115 private)",Pakistan has a total of **278 universities**—163 public and 115 private.,"10_Education.pdf, page 5 | 10_Education.pdf, page 15 | 10_Education.pdf, page 17 | 10_Education.pdf, page 18",y
+200,7,What was life expectancy at birth in Pakistan in 2024?,67.8 years (up from 66.5 in 2018),Life expectancy at birth in Pakistan in 2024 was **67.8 years**.,"11_Health_and_Nutrition.pdf, page 3 | 11_Health_and_Nutrition.pdf, page 2",y
+200,8,How many registered doctors were there in Pakistan in 2025?,"336,582","I’m sorry, but the information about the number of registered doctors in Pakistan for 2025 isn’t included in the provided context.","11_Health_and_Nutrition.pdf, page 20 | 11_Health_and_Nutrition.pdf, page 17 | 11_Health_and_Nutrition.pdf, page 2 | 11_Health_and_Nutrition.pdf, page 4",n
+200,9,How much was Pakistan's health expenditure in FY2025?,Rs 942.2 billion (up 1.9% from Rs 924.9 billion in FY2024),"Pakistan’s total health expenditure for FY 2025 (the 2024‑25 financial year) was **Rs 942,188 million** (approximately Rs 942 billion).","11_Health_and_Nutrition.pdf, page 4 | 11_Health_and_Nutrition.pdf, page 5 | 11_Health_and_Nutrition.pdf, page 20 | 11_Health_and_Nutrition.pdf, page 22",y
+200,10,What was Pakistan's national mean temperature in 2025 and how did the year rank?,"23.9 °C, 1.09 °C above average; 2nd warmest year in the past 65 years","Pakistan’s national annual mean temperature in 2025 was **23.9 °C**, and the year was ranked as the **second‑warmest year on record over the past 65 years**.","17_Climate_Change.pdf, page 6 | 17_Climate_Change.pdf, page 5 | 17_Climate_Change.pdf, page 3",y
+200,11,When was the Pakistan Green Taxonomy approved and notified?,15 September 2025,The Pakistan Green Taxonomy was approved and notified on **15 September 2025**.,"17_Climate_Change.pdf, page 13 | 17_Climate_Change.pdf, page 24 | 17_Climate_Change.pdf, page 14 | 17_Climate_Change.pdf, page 7",y
+200,12,Into which three paradigms does the RAG survey categorize RAG research?,"Naive RAG, Advanced RAG, Modular RAG","The survey classifies RAG research into three paradigms: **Naive RAG, Advanced RAG, and Modular RAG**.","rag_survey.pdf, page 2 | rag_survey.pdf, page 1 | rag_survey.pdf, page 14",y
+200,13,What are the three quality scores used to evaluate RAG models in the survey?,"Context relevance, answer faithfulness, answer relevance","The survey identifies **three quality scores** for evaluating RAG models:
+
+1. **Context Relevance** – measures how precisely and specifically the retrieved context matches the query.  
+2. **Answer Faithfulness** – checks that the generated answer remains true to the retrieved context.  
+3. **Answer Relevance** – ensures the answer directly addresses the posed question.","rag_survey.pdf, page 12 | rag_survey.pdf, page 14",y
+200,14,What four abilities does RAG evaluation encompass according to the survey?,"Noise robustness, negative rejection, information integration, counterfactual robustness","The survey lists **four key abilities** that RAG evaluation focuses on:
+
+1. **Noise Robustness**  
+2. **Negative Rejection**  
+3. **Information Integration**  
+4. **Counterfactual Robustness**","rag_survey.pdf, page 12 | rag_survey.pdf, page 2 | rag_survey.pdf, page 14",y
+200,15,What is the maximum context length of GPT-4 Turbo?,I don't know (not in the PDFs),I don't know.,"rag_survey.pdf, page 10 | rag_survey.pdf, page 11 | rag_survey.pdf, page 18 | rag_survey.pdf, page 1",y
+500,1,What is the minimum memory size recommended when setting up the Ubuntu virtual machine in VirtualBox?,1024 MB,"I’m sorry, but I don’t know the answer from the provided context.","virtualbox_ubuntu_lab_manual.pdf, page 1-7 | rag_survey.pdf, page 7 | rag_survey.pdf, page 15 | 17_Climate_Change.pdf, page 10",n
+500,2,Which virtual hard disk file type is selected by default when creating the virtual hard drive?,VDI,The default virtual hard‑disk file type selected is **VDI** (VirtualBox Disk Image).,"virtualbox_ubuntu_lab_manual.pdf, page 1-7 | virtualbox_ubuntu_lab_manual.pdf, page 7-16 | virtualbox_ubuntu_lab_manual.pdf, page 17-26 | 10_Education.pdf, page 4",y
+500,3,Under which license is VirtualBox freely available as open source software?,GNU General Public License (GPL) version 2,VirtualBox is freely available as open‑source software under the **GNU General Public License (GPL) version 2**.,"virtualbox_ubuntu_lab_manual.pdf, page 1-7 | virtualbox_ubuntu_lab_manual.pdf, page 7-16 | virtualbox_ubuntu_lab_manual.pdf, page 17-26 | 11_Health_and_Nutrition.pdf, page 22",y
+500,4,"What was Pakistan's literacy rate (age 10 and above) in 2024-25, and what were male and female rates?","63 percent (up from 61); male 73 percent, female 54 percent","Pakistan’s literacy rate (age 10 and above) for 2024‑25 was **63 % overall**.  
+- **Male literacy:** 73 %  
+- **Female literacy:** 54 %","10_Education.pdf, page 7 | 10_Education.pdf, page 19-20 | 10_Education.pdf, page 5 | 10_Education.pdf, page 22",y
+500,5,What is Pakistan's HDI rank in the education indicators table?,168,I don't know.,"10_Education.pdf, page 5 | 10_Education.pdf, page 19-20 | 10_Education.pdf, page 22 | 10_Education.pdf, page 10",n
+500,6,How many universities does Pakistan have?,"278 (163 public, 115 private)",Pakistan has a total of **278 universities** (163 public and 115 private).,"10_Education.pdf, page 5 | 10_Education.pdf, page 15 | 10_Education.pdf, page 19-20 | 10_Education.pdf, page 22",y
+500,7,What was life expectancy at birth in Pakistan in 2024?,67.8 years (up from 66.5 in 2018),Life expectancy at birth in Pakistan in 2024 was **67.8 years**.,"11_Health_and_Nutrition.pdf, page 3 | 11_Health_and_Nutrition.pdf, page 1-2 | 11_Health_and_Nutrition.pdf, page 17 | 11_Health_and_Nutrition.pdf, page 5",y
+500,8,How many registered doctors were there in Pakistan in 2025?,"336,582",,"11_Health_and_Nutrition.pdf, page 1-2 | 11_Health_and_Nutrition.pdf, page 11 | 11_Health_and_Nutrition.pdf, page 9 | 11_Health_and_Nutrition.pdf, page 22",n
+500,9,How much was Pakistan's health expenditure in FY2025?,Rs 942.2 billion (up 1.9% from Rs 924.9 billion in FY2024),"Pakistan’s total health expenditure for FY 2025 (the 2024‑25 fiscal year) was **Rs 942,188 million** (approximately Rs 942.2 billion).","11_Health_and_Nutrition.pdf, page 5 | 10_Education.pdf, page 9 | 11_Health_and_Nutrition.pdf, page 1-2 | 11_Health_and_Nutrition.pdf, page 13",y
+500,10,What was Pakistan's national mean temperature in 2025 and how did the year rank?,"23.9 °C, 1.09 °C above average; 2nd warmest year in the past 65 years","Pakistan’s national annual mean temperature in 2025 was **23.9 °C**, and the year ranked as the **second‑warmest year on record** over the past sixty‑five years.","17_Climate_Change.pdf, page 5 | 17_Climate_Change.pdf, page 3 | 17_Climate_Change.pdf, page 4",y
+500,11,When was the Pakistan Green Taxonomy approved and notified?,15 September 2025,I don't know.,"17_Climate_Change.pdf, page 24 | 17_Climate_Change.pdf, page 14 | 17_Climate_Change.pdf, page 12 | 17_Climate_Change.pdf, page 13",n
+500,12,Into which three paradigms does the RAG survey categorize RAG research?,"Naive RAG, Advanced RAG, Modular RAG","The survey classifies RAG research into three paradigms:
+
+1. **Naive RAG**  
+2. **Advanced RAG**  
+3. **Modular RAG**","rag_survey.pdf, page 2 | rag_survey.pdf, page 1 | rag_survey.pdf, page 14",y
+500,13,What are the three quality scores used to evaluate RAG models in the survey?,"Context relevance, answer faithfulness, answer relevance","The survey identifies **three quality scores** for evaluating RAG models:
+
+1. **Context Relevance** – how well the retrieved context matches the query.  
+2. **Answer Faithfulness** – whether the generated answer stays true to the retrieved context.  
+3. **Answer Relevance** – how directly the answer addresses the posed question.","rag_survey.pdf, page 14 | rag_survey.pdf, page 12 | rag_survey.pdf, page 15 | rag_survey.pdf, page 2",y
+500,14,What four abilities does RAG evaluation encompass according to the survey?,"Noise robustness, negative rejection, information integration, counterfactual robustness","The survey identifies **four key abilities** that RAG evaluation focuses on:
+
+1. **Noise Robustness** – the model’s ability to handle noisy or irrelevant documents.  
+2. **Negative Rejection** – the model’s capacity to refrain from answering when the retrieved content lacks the necessary knowledge.  
+3. **Information Integration** – the skill of synthesizing information from multiple documents to answer complex queries.  
+4. **Counterfactual Robustness** – the model’s ability to recognize and ignore known inaccuracies or misinformation in the retrieved material.","rag_survey.pdf, page 14 | rag_survey.pdf, page 12 | rag_survey.pdf, page 2 | rag_survey.pdf, page 1",y
+500,15,What is the maximum context length of GPT-4 Turbo?,I don't know (not in the PDFs),I don't know.,"rag_survey.pdf, page 11 | 17_Climate_Change.pdf, page 14 | 10_Education.pdf, page 18 | rag_survey.pdf, page 6",y
+1000,1,What is the minimum memory size recommended when setting up the Ubuntu virtual machine in VirtualBox?,1024 MB,The manual recommends allocating a minimum of **1024 MB (1 GB)** of memory for the Ubuntu virtual machine.,"virtualbox_ubuntu_lab_manual.pdf, page 1-17 | rag_survey.pdf, page 15 | 10_Education.pdf, page 4 | rag_survey.pdf, page 10",y
+1000,2,Which virtual hard disk file type is selected by default when creating the virtual hard drive?,VDI,The default virtual hard‑disk file type selected is **VDI** (VirtualBox Disk Image).,"virtualbox_ubuntu_lab_manual.pdf, page 1-17 | virtualbox_ubuntu_lab_manual.pdf, page 17-26 | 10_Education.pdf, page 4 | rag_survey.pdf, page 7",y
+1000,3,Under which license is VirtualBox freely available as open source software?,GNU General Public License (GPL) version 2,VirtualBox is freely available as open‑source software under the **GNU General Public License (GPL) version 2**.,"virtualbox_ubuntu_lab_manual.pdf, page 1-17 | virtualbox_ubuntu_lab_manual.pdf, page 17-26 | 10_Education.pdf, page 17-19 | 11_Health_and_Nutrition.pdf, page 12",y
+1000,4,"What was Pakistan's literacy rate (age 10 and above) in 2024-25, and what were male and female rates?","63 percent (up from 61); male 73 percent, female 54 percent","Pakistan’s literacy rate for people aged 10 years and above in 2024‑25 was **63 %**.  
+- **Male literacy:** **73 %**  
+- **Female literacy:** **54 %**","10_Education.pdf, page 7 | 10_Education.pdf, page 5 | 10_Education.pdf, page 8-9 | 10_Education.pdf, page 6",y
+1000,5,What is Pakistan's HDI rank in the education indicators table?,168,I don't know.,"10_Education.pdf, page 5 | 10_Education.pdf, page 10-11 | 10_Education.pdf, page 7 | 10_Education.pdf, page 15-16",n
+1000,6,How many universities does Pakistan have?,"278 (163 public, 115 private)",Pakistan has a total of **278 universities** (163 public and 115 private).,"10_Education.pdf, page 5 | 10_Education.pdf, page 15-16 | 10_Education.pdf, page 10-11 | 10_Education.pdf, page 7",y
+1000,7,What was life expectancy at birth in Pakistan in 2024?,67.8 years (up from 66.5 in 2018),Life expectancy at birth in Pakistan in 2024 was **67.8 years**.,"11_Health_and_Nutrition.pdf, page 1-3 | 10_Education.pdf, page 7 | 11_Health_and_Nutrition.pdf, page 13-14 | 10_Education.pdf, page 5",y
+1000,8,How many registered doctors were there in Pakistan in 2025?,"336,582",,"11_Health_and_Nutrition.pdf, page 1-3 | 11_Health_and_Nutrition.pdf, page 11 | 11_Health_and_Nutrition.pdf, page 9 | 10_Education.pdf, page 5",n
+1000,9,How much was Pakistan's health expenditure in FY2025?,Rs 942.2 billion (up 1.9% from Rs 924.9 billion in FY2024),Pakistan’s health expenditure in FY 2025 was Rs 19.375 billion.,"11_Health_and_Nutrition.pdf, page 1-3 | 11_Health_and_Nutrition.pdf, page 13-14 | 11_Health_and_Nutrition.pdf, page 11 | 10_Education.pdf, page 10-11",n
+1000,10,What was Pakistan's national mean temperature in 2025 and how did the year rank?,"23.9 °C, 1.09 °C above average; 2nd warmest year in the past 65 years","Pakistan’s national annual mean temperature in 2025 was **23.9 °C**, and the year ranked as the **second‑warmest year on record** over the past sixty‑five years.","17_Climate_Change.pdf, page 5 | 17_Climate_Change.pdf, page 3 | 17_Climate_Change.pdf, page 4 | 17_Climate_Change.pdf, page 6-7",y
+1000,11,When was the Pakistan Green Taxonomy approved and notified?,15 September 2025,I don't know.,"17_Climate_Change.pdf, page 14-15 | 17_Climate_Change.pdf, page 12 | 17_Climate_Change.pdf, page 11 | 17_Climate_Change.pdf, page 9",n
+1000,12,Into which three paradigms does the RAG survey categorize RAG research?,"Naive RAG, Advanced RAG, Modular RAG","The survey divides RAG research into three paradigms:
+
+1. **Naive RAG**  
+2. **Advanced RAG**  
+3. **Modular RAG**","rag_survey.pdf, page 2 | rag_survey.pdf, page 7 | rag_survey.pdf, page 4 | rag_survey.pdf, page 16",y
+1000,13,What are the three quality scores used to evaluate RAG models in the survey?,"Context relevance, answer faithfulness, answer relevance","The survey identifies **three quality scores** for evaluating RAG models:
+
+1. **Context Relevance** – how well the retrieved context matches the query.  
+2. **Answer Faithfulness** – how faithfully the generated answer reflects the retrieved context.  
+3. **Answer Relevance** – how directly the answer addresses the posed question.","rag_survey.pdf, page 15 | rag_survey.pdf, page 2 | rag_survey.pdf, page 7 | rag_survey.pdf, page 12",y
+1000,14,What four abilities does RAG evaluation encompass according to the survey?,"Noise robustness, negative rejection, information integration, counterfactual robustness","The survey lists **four key abilities** that RAG evaluation should assess:
+
+1. **Noise Robustness** – how well the model handles irrelevant or noisy documents.  
+2. **Negative Rejection** – the model’s ability to refrain from answering when the retrieved content is insufficient.  
+3. **Information Integration** – the capacity to synthesize facts from multiple documents.  
+4. **Counterfactual Robustness** – the ability to ignore or correct known inaccuracies in the retrieved material.","rag_survey.pdf, page 2 | rag_survey.pdf, page 4 | rag_survey.pdf, page 12 | rag_survey.pdf, page 7",y
+1000,15,What is the maximum context length of GPT-4 Turbo?,I don't know (not in the PDFs),I don't know.,"17_Climate_Change.pdf, page 14-15 | 10_Education.pdf, page 13-14 | rag_survey.pdf, page 10 | rag_survey.pdf, page 19",y
